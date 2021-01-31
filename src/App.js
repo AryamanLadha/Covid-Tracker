@@ -113,6 +113,7 @@ class App extends Component {
         "mi": { fetched: false, data: []},
         "mn": { fetched: false, data: []},
         "ms": { fetched: false, data: []},
+        "mt": { fetched: false, data: []},
         "mo": { fetched: false, data: []},
         "ne": { fetched: false, data: []},
         "nv": { fetched: false, data: []},
@@ -532,7 +533,7 @@ class App extends Component {
         <button onClick= {async () => await this.changeFilter("ky")}> Kentucky</button>
         <button onClick= {async () => await this.changeFilter("la")}> Lousiana</button>
         <button onClick= {async () => await this.changeFilter("me")}> Maine</button>
-        <button onClick= {async () => await this.changeFilter("md")}> Marlyand</button>
+        <button onClick= {async () => await this.changeFilter("md")}> Maryland</button>
         <button onClick= {async () => await this.changeFilter("ma")}> Massachusetts</button>
         <button onClick= {async () => await this.changeFilter("mi")}> Michigan</button>
         <button onClick= {async () => await this.changeFilter("mn")}> Minnesota</button>
@@ -560,7 +561,7 @@ class App extends Component {
         <button onClick= {async () => await this.changeFilter("vt")}> Vermont</button>
         <button onClick= {async () => await this.changeFilter("vi")}> Virginia</button>
         <button onClick= {async () => await this.changeFilter("wa")}> Washington</button>
-        <button onClick= {async () => await this.changeFilter("wv")}> West Virgina</button>
+        <button onClick= {async () => await this.changeFilter("wv")}> West Virginia</button>
         <button onClick= {async () => await this.changeFilter("wi")}> Wisconsin</button>
         <button onClick= {async () => await this.changeFilter("wy")}> Wyoming</button>
         <button onClick= {async () => await this.changeFilter("us")}> Reset</button>
