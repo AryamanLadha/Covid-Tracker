@@ -6,7 +6,7 @@ import DropdownButton from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Spinner from 'react-bootstrap/Spinner'
 function numberWithCommas(x) {
-  if(x === null){
+  if(x == null){
     return '-'
   }
   x = x.toString();
@@ -305,6 +305,7 @@ class App extends Component {
     for(var i = 0; i< display_data.length-1; i++){
       //console.log(this.state.data_array)
       var u = display_data[i].date; //2020101
+      if(u!=null){
       var d = u.toString(); //"20200101"
       var yy = parseInt(d.substring(0,4)); //2020
       var mm = parseInt(d.substring(4,6))-1;  //01
@@ -327,14 +328,44 @@ class App extends Component {
         slide_end = x;
       }
     }
+    }
     var total_hospitalized = display_data[display_data.length-1].hospitalizedCumulative;
     var new_hospitalized = display_data[display_data.length-1].hospitalizedIncrease;
     var deaths = display_data[display_data.length-1].death;
     var new_deaths = display_data[display_data.length-1].deathIncrease;
     var total_cases = display_data[display_data.length-1].positive;
+    if(display_date == null){
+      var tmp = new Date().toString();
+      console.log(tmp);
+      var y = tmp.substring(11,15); //2020
+      var m = tmp.substring(4,7);  //01
+      var p = tmp.substring(8,10);// 01
+      display_date = p + '-' + m + '-' + y;
+    } 
+    console.log(display_date);
+    if(total_cases == null){
+      total_cases = "-";
+      console.log("Exit");
+    }
     var new_cases = display_data[display_data.length-1].positiveIncrease;
     return (
       <body>
+        <header>
+          <div class="s_container">
+            <div id="branding">
+              <h1>Covid-19 Tracker | Aryaman Ladha</h1>
+            </div>     
+            <nav>
+              <ul>
+                <li>Date: <div id="info">{display_date}</div></li>
+                <li>Total U.S. Covid-19 Cases: <div id="info">{total_cases}</div></li>
+              </ul>
+            </nav>
+
+          </div>
+        </header>
+
+
       <div className="wrapper">
         <div className="left_column">
         <div className="graph_heading">{slide_end} </div>
