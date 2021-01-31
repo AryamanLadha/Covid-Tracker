@@ -146,7 +146,7 @@ class App extends Component {
   }
 
   async fetchStateData(state_name){
-    var data_array = [];
+    var fetch_string = "https://api.covidtracking.com/v1/states/" + state_name + "/daily.json";
     var now = new Date();
     var daysOfYear = [];
     for (var d = new Date(2020, 11, 31); d <= now; d.setDate(d.getDate() + 1)) { //In build version, set date to 2020, 3, 3
@@ -173,19 +173,28 @@ class App extends Component {
       var request_string = 'https://api.covidtracking.com/v1/states/' +state_name+ "/" + date_string + '.json';
       daysOfYear.push(request_string);
     }
-    for(var i = 0; i< daysOfYear.length; i++){
-        try{
-          var res = await fetch(daysOfYear[i]);
-          var data = res.json();
-          //console.log(data);
-          data_array.push(data);
-        }
-        catch{
-          //console.log("F");
-        }
+    // for(var i = 0; i< daysOfYear.length; i++){
+    //     try{
+    //       var res = await fetch(daysOfYear[i]);
+    //       var data = res.json();
+    //       //console.log(data);
+    //       data_array.push(data);
+    //     }
+    //     catch{
+    //       //console.log("F");
+    //     }
+    // }
+
+    try{
+      var res = await fetch(fetch_string);
+      var data = await res.json();
     }
+    catch{
+      console.log("Error in fetch");
+    }
+
     var state_array = this.state.state_array;
-    state_array[state_name].data = data_array;
+    state_array[state_name].data = data;
     state_array[state_name].fetched = true;
     this.setState({
       state_array: state_array
@@ -210,7 +219,6 @@ class App extends Component {
 
   }
   async componentDidMount(){
-    var data_array = [];
     var now = new Date();
     var daysOfYear = [];
     for (var d = new Date(2020, 11, 31); d <= now; d.setDate(d.getDate() + 1)) { //In build version, set date to 2020, 3, 3
@@ -237,19 +245,26 @@ class App extends Component {
       var request_string = 'https://api.covidtracking.com/v1/us/' + date_string + '.json';
       daysOfYear.push(request_string);
     }
-    for(var i = 0; i< daysOfYear.length; i++){
-        try{
-          var res = await fetch(daysOfYear[i]);
-          var data = await res.json();
-          //console.log(data);
-          data_array.push(data);
-        }
-        catch{
-          //console.log("F");
-        }
+    // for(var i = 0; i< daysOfYear.length; i++){
+    //     try{
+    //       var res = await fetch(daysOfYear[i]);
+    //       var data = await res.json();
+    //       //console.log(data);
+    //       data_array.push(data);
+    //     }
+    //     catch{
+    //       //console.log("F");
+    //     }
+    // }
+    try{
+      var res = await fetch("https://api.covidtracking.com/v1/us/daily.json");
+      var data = await res.json();
+    }
+    catch{
+      console.log("Error in fetch");
     }
     this.setState({
-      data_array : data_array,
+      data_array : data,
       fetched: true,
     })
 
@@ -300,10 +315,9 @@ class App extends Component {
     graph_daily_deaths.push(['x','New Deaths']);
     graph_total.push(['x', 'Total Cases']);
     graph_daily_new.push(['x', 'New Cases']);
-    var slide_begin;
     var slide_end;
     console.log(display_data);
-    for(var i = 0; i< display_data.length-1; i++){
+    for(var i = 0; i < display_data.length-1; i++){
       //console.log(this.state.data_array)
       var u = display_data[i].date; //2020101
       if(u!=null){
@@ -330,11 +344,11 @@ class App extends Component {
       }
     }
     }
-    var total_hospitalized = display_data[display_data.length-1].hospitalizedCumulative;
-    var new_hospitalized = display_data[display_data.length-1].hospitalizedIncrease;
-    var deaths = display_data[display_data.length-1].death;
-    var new_deaths = display_data[display_data.length-1].deathIncrease;
-    var total_cases = display_data[display_data.length-1].positive;
+    var total_hospitalized = display_data[0].hospitalizedCumulative;
+    var new_hospitalized = display_data[0].hospitalizedIncrease;
+    var deaths = display_data[0].death;
+    var new_deaths = display_data[0].deathIncrease;
+    var total_cases = display_data[0].positive;
     if(display_date == null){
       var tmp = new Date().toString();
       console.log(tmp);
@@ -344,11 +358,7 @@ class App extends Component {
       display_date = p + '-' + m + '-' + y;
     } 
     console.log(display_date);
-    if(total_cases == null){
-      total_cases = "-";
-      console.log("Exit");
-    }
-    var new_cases = display_data[display_data.length-1].positiveIncrease;
+    var new_cases = display_data[0].positiveIncrease;
     return (
       <body>
         <header>
@@ -359,7 +369,7 @@ class App extends Component {
             <nav>
               <ul>
                 <li>Date: <div id="info">{display_date}</div></li>
-                <li>Total U.S. Covid-19 Cases: <div id="info">{total_cases}</div></li>
+                <li>Total U.S. Covid-19 Cases: <div id="info">{numberWithCommas(total_cases)}</div></li>
               </ul>
             </nav>
 
