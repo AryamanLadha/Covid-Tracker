@@ -2,9 +2,10 @@
 import './App.css';
 import {Component} from "react";
 import Chart from "react-google-charts";
-import DropdownButton from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Spinner from 'react-bootstrap/Spinner'
+// import DropdownButton from 'react-bootstrap/Button';
+// import Dropdown from 'react-bootstrap/Dropdown';
+// import Spinner from 'react-bootstrap/Spinner'
+import Loader from 'react-loader-spinner';
 function numberWithCommas(x) {
   if(x == null){
     return '-'
@@ -266,20 +267,14 @@ class App extends Component {
     var display_name = 'United States';
     if(!this.state.fetched){
       return (
-      <Spinner animation="border" role="status">
-          <span className="sr-only">Here...</span>
-      </Spinner>
-      // <div> Loading Data</div>
+        <Loader type="Puff" className="centered" color="#000000" height={80} width={80}/>
       );
     }
     if(this.state.states_wanted){
       var name = this.state.state_name;
       if(!this.state.state_array[name].fetched){
         return (
-          <Spinner animation="border" role="status">
-          <span className="sr-only">Loading...</span>
-          </Spinner>
-        // <div>Loading Data</div>
+          <Loader type="Puff" className="centered" color="#000000" height={80} width={80}/>
         );
       }
       else{
@@ -319,7 +314,7 @@ class App extends Component {
       graph_deaths.push([x,display_data[i].death]);
 
       if(i === 0){
-        slide_begin = x;
+        // slide_begin = x;
       }
       if(i === this.state.data_array.length-1){
         console.log("Here");
@@ -364,6 +359,16 @@ class App extends Component {
 
           </div>
         </header>
+
+
+
+
+
+
+
+
+
+
 
 
       <div className="wrapper">
