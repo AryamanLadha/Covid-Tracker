@@ -1,3 +1,8 @@
+body{
+  font-family: Cambria;
+}
+
+
 .App {
   text-align: center;
 }
@@ -35,4 +40,69 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 65% 35%;
+  padding: 1 em;
+}
+
+.heading {
+  /* font-family: 'Playfair Display', serif;
+  src: 'https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap'; */
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.country{
+  text-align: center;
+  font-size: 50px;
+  padding: 30px 0px;
+}
+
+
+
+.graph_heading{
+  background: white;
+  /* font-family: 'Playfair Display', serif;
+  src: 'https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap'; */
+  font-weight: bold;
+  font-size: 40px;
+
+}
+.left_column{
+  background: white;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#right_column{
+  /* background-color: blue; */
+  margin-left: 15px;
+  text-indent: 15px;
+  border: 2px solid black;
+  background: #add4db;
+}
+
+.numbers{
+    font-size: 30px;
+    /* font-family: 'Courier New', Courier, monospace; */
+    font-weight: 700;
+}
+
+.statistics{
+  display: grid;
+  grid-template-rows: repeat(12, 1fr);
+  padding: 1 em;
+}
+
+hr {
+  border: 0;
+  width: 50%;
+  color: black;
+  background-color:gray;
+  height: 2px;
+  margin-left: 15px;
+  align: left;
 }
