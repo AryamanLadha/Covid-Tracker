@@ -531,13 +531,13 @@ class App extends Component {
         <button onClick= {async () => await this.changeFilter("ia")}> Iowa</button>
         <button onClick= {async () => await this.changeFilter("ks")}> Kansas</button>
         <button onClick= {async () => await this.changeFilter("ky")}> Kentucky</button>
-        <button onClick= {async () => await this.changeFilter("la")}> Lousiana</button>
+        <button onClick= {async () => await this.changeFilter("la")}> Louisiana</button>
         <button onClick= {async () => await this.changeFilter("me")}> Maine</button>
         <button onClick= {async () => await this.changeFilter("md")}> Maryland</button>
         <button onClick= {async () => await this.changeFilter("ma")}> Massachusetts</button>
         <button onClick= {async () => await this.changeFilter("mi")}> Michigan</button>
         <button onClick= {async () => await this.changeFilter("mn")}> Minnesota</button>
-        <button onClick= {async () => await this.changeFilter("ms")}> Mississipi</button>
+        <button onClick= {async () => await this.changeFilter("ms")}> Mississippi</button>
         <button onClick= {async () => await this.changeFilter("mo")}> Missouri</button>
         <button onClick= {async () => await this.changeFilter("mt")}> Montana</button>
         <button onClick= {async () => await this.changeFilter("ne")}> Nebraska</button>
