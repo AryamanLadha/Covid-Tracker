@@ -267,14 +267,20 @@ class App extends Component {
     var display_name = 'United States';
     if(!this.state.fetched){
       return (
-        <Loader type="Puff" className="centered" color="#000000" height={80} width={80}/>
+        <div>
+          <div className="centered-text">Fetching Data ... </div>
+          <Loader type="Puff" className="centered" color="#000000" height={80} width={80}/>
+        </div>
       );
     }
     if(this.state.states_wanted){
       var name = this.state.state_name;
       if(!this.state.state_array[name].fetched){
         return (
+        <div>
+          <div className="centered-text">Fetching Data ... </div>
           <Loader type="Puff" className="centered" color="#000000" height={80} width={80}/>
+        </div>
         );
       }
       else{
