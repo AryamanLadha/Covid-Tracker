@@ -1,11 +1,8 @@
-//import logo from './logo.svg';
 import './App.css';
 import {Component} from "react";
 import Chart from "react-google-charts";
-// import DropdownButton from 'react-bootstrap/Button';
-// import Dropdown from 'react-bootstrap/Dropdown';
-// import Spinner from 'react-bootstrap/Spinner'
 import Loader from 'react-loader-spinner';
+//Put a number into a format with commas
 function numberWithCommas(x) {
   if(x == null){
     return '-'
@@ -15,7 +12,8 @@ function numberWithCommas(x) {
   while (pattern.test(x))
       x = x.replace(pattern, "$1,$2");
   return x;
-}
+} 
+//map each state's code to it's full name
 const dictionary = {
   'az':'Arizona',
   'al':'Alabama',
@@ -77,6 +75,7 @@ const dictionary = {
 };
 
 class App extends Component {
+  //Initialize all data arrays to empty and all fetched bools to false
   constructor(){
     super();
     this.state = 
@@ -146,46 +145,9 @@ class App extends Component {
     };
   }
 
+  //Given a state code, fetch it's historic date from the COVID-19 Tracking Project's API and convert to json
   async fetchStateData(state_name){
     var fetch_string = "https://api.covidtracking.com/v1/states/" + state_name + "/daily.json";
-    var now = new Date();
-    var daysOfYear = [];
-    for (var d = new Date(2020, 11, 31); d <= now; d.setDate(d.getDate() + 1)) { //In build version, set date to 2020, 3, 3
-      //On the test version, use 2020, 11, 31
-      var date = new Date(d);
-      //console.log(date);
-      var year = date.getFullYear().toString();
-      var month = date.getMonth()+1;
-      if(month>9){
-        month = month.toString();
-      }
-      else{
-        month = "0" + month.toString();
-      }
-      var day = date.getDate();
-      if(day>9){
-        day = day.toString();
-      }
-      else{
-        day = "0" + day.toString();
-      }
-
-      var date_string = year + month + day;
-      var request_string = 'https://api.covidtracking.com/v1/states/' +state_name+ "/" + date_string + '.json';
-      daysOfYear.push(request_string);
-    }
-    // for(var i = 0; i< daysOfYear.length; i++){
-    //     try{
-    //       var res = await fetch(daysOfYear[i]);
-    //       var data = res.json();
-    //       //console.log(data);
-    //       data_array.push(data);
-    //     }
-    //     catch{
-    //       //console.log("F");
-    //     }
-    // }
-
     try{
       var res = await fetch(fetch_string);
       var data = await res.json();
@@ -193,7 +155,7 @@ class App extends Component {
     catch{
       console.log("Error in fetch");
     }
-
+    //Update that state's data array with this information, and set it's fetched status to true
     var state_array = this.state.state_array;
     state_array[state_name].data = data;
     state_array[state_name].fetched = true;
@@ -201,6 +163,7 @@ class App extends Component {
       state_array: state_array
     });
   }
+  //Set which state's (or the US) data you want. If the state selected hasn't had its data fetched, fetch it
   async changeFilter(name){
     if(name === "us"){
       this.setState({
@@ -217,46 +180,9 @@ class App extends Component {
       }
     }
 
-
+//After the component mounts, fetch the US historic data.
   }
   async componentDidMount(){
-    var now = new Date();
-    var daysOfYear = [];
-    for (var d = new Date(2020, 11, 31); d <= now; d.setDate(d.getDate() + 1)) { //In build version, set date to 2020, 3, 3
-      //On the test version, use 2020, 11, 31
-      var date = new Date(d);
-      //console.log(date);
-      var year = date.getFullYear().toString();
-      var month = date.getMonth()+1;
-      if(month>9){
-        month = month.toString();
-      }
-      else{
-        month = "0" + month.toString();
-      }
-      var day = date.getDate();
-      if(day>9){
-        day = day.toString();
-      }
-      else{
-        day = "0" + day.toString();
-      }
-
-      var date_string = year + month + day;
-      var request_string = 'https://api.covidtracking.com/v1/us/' + date_string + '.json';
-      daysOfYear.push(request_string);
-    }
-    // for(var i = 0; i< daysOfYear.length; i++){
-    //     try{
-    //       var res = await fetch(daysOfYear[i]);
-    //       var data = await res.json();
-    //       //console.log(data);
-    //       data_array.push(data);
-    //     }
-    //     catch{
-    //       //console.log("F");
-    //     }
-    // }
     try{
       var res = await fetch("https://api.covidtracking.com/v1/us/daily.json");
       var data = await res.json();
@@ -268,19 +194,13 @@ class App extends Component {
       data_array : data,
       fetched: true,
     })
-
-      //   .then(res => res.json())
-      //   .then((data) => {
-      //     console.log(data);
-      //     data_array.push(data);
-      //   })
-      //   .catch(console.log)
-      // }
-    //console.log(data_array.length);
   }
+
+
   render(){
     var display_data = []
     var display_name = 'United States';
+    //While the data is being fetched, display a simple loading page
     if(!this.state.fetched){
       return (
         <div>
@@ -299,6 +219,7 @@ class App extends Component {
         </div>
         );
       }
+    //Select the data you need to display
       else{
         display_data = this.state.state_array[name].data;
       }
@@ -308,6 +229,7 @@ class App extends Component {
       display_data = this.state.data_array;
     }
     var display_date;
+    //Initialize the graphs you want to render
     var graph_total = []
     var graph_daily_new = []
     var graph_daily_deaths = []
@@ -316,52 +238,37 @@ class App extends Component {
     graph_daily_deaths.push(['x','New Deaths']);
     graph_total.push(['x', 'Total Cases']);
     graph_daily_new.push(['x', 'New Cases']);
-    var slide_end;
-    console.log(display_data);
+    //For each data point, add it's date to the X axis and the corresponding entry to the corresponding graph
     for(var i = 0; i < display_data.length-1; i++){
-      //console.log(this.state.data_array)
       var u = display_data[i].date; //2020101
       if(u!=null){
       var d = u.toString(); //"20200101"
       var yy = parseInt(d.substring(0,4)); //2020
       var mm = parseInt(d.substring(4,6))-1;  //01
       var dd = parseInt(d.substring(6,8));// 01
-      //var format_date = yy+ "-" + mm + "-" +dd;// "2020-01-01"
       var x = new Date(yy,mm,dd);
-      //console.log(x);
       graph_daily_new.push([x,display_data[i].positiveIncrease]);
       graph_total.push([x,display_data[i].positive]);
       graph_daily_deaths.push([x,display_data[i].deathIncrease]);
       graph_deaths.push([x,display_data[i].death]);
-
-      if(i === 0){
-        // slide_begin = x;
-      }
-      if(i === this.state.data_array.length-1){
-        console.log("Here");
-        display_date = x.toString().substring(4,15);
-        console.log(display_date);
-        slide_end = x;
-      }
     }
     }
+    //Get the numbers from today to be diaplayed on the right column
     var total_hospitalized = display_data[0].hospitalizedCumulative;
     var new_hospitalized = display_data[0].hospitalizedIncrease;
     var deaths = display_data[0].death;
     var new_deaths = display_data[0].deathIncrease;
     var total_cases = display_data[0].positive;
-    if(display_date == null){
-      var tmp = new Date().toString();
-      console.log(tmp);
-      var y = tmp.substring(11,15); //2020
-      var m = tmp.substring(4,7);  //01
-      var p = tmp.substring(8,10);// 01
-      display_date = p + '-' + m + '-' + y;
-    } 
-    console.log(display_date);
     var new_cases = display_data[0].positiveIncrease;
+    //Get today's date in readable format
+    var tmp = new Date().toString();
+    var y = tmp.substring(11,15); //2020
+    var m = tmp.substring(4,7);  //01
+    var p = tmp.substring(8,10);// 01
+    display_date = p + '-' + m + '-' + y;
     return (
       <body>
+
         <header>
           <div class="s_container">
             <div id="branding">
@@ -378,19 +285,9 @@ class App extends Component {
         </header>
 
 
-
-
-
-
-
-
-
-
-
-
       <div className="wrapper">
         <div className="left_column">
-        <div className="graph_heading">{slide_end} </div>
+        <div className="graph_heading"> </div>
         <span className="graph_heading">Total Cases </span>
         <Chart
           width={'800px'}
@@ -398,42 +295,7 @@ class App extends Component {
           chartType="LineChart"
           loader={<div>Loading Chart</div>}
           data={graph_total}
-          // options={{
-          //   hAxis: {
-          //     title: 'Time',
-          //   },
-          //   vAxis: {
-          //     title: 'Total cases',
-          //   }
-            // chartArea: { height: '400px', width: '600px' },
-            // //hAxis: { slantedText: false },
-            // vAxis: { viewWindow: { min: 0, max: 2000 } },
-            // legend: { position: 'none' },
-            //
-          //}}
           rootProps={{ 'data-testid': '1' }}
-          // chartPackages={['corechart', 'controls']}
-          // controls={[
-          //   {
-          //     controlType: 'ChartRangeFilter',
-          //     options: {
-          //       filterRowIndex: 0,
-          //       ui: {
-          //         chartType: 'LineChart',
-          //         chartOptions: {
-          //           chartArea: { width: '600px', height: '50px' },
-          //           hAxis: { baselineColor: 'none' },
-          //         },
-          //       },
-          //     },
-          //     controlPosition: 'bottom',
-          //     controlWrapperParams: {
-          //       state: {
-          //         range: { start: new Date(2020,11,31), end: new Date(2021,1,28) },
-          //       },
-          //     },
-          //   },
-          // ]}
         />
         <span className="graph_heading"> Daily New Cases </span>
       <Chart
@@ -442,14 +304,6 @@ class App extends Component {
           chartType="LineChart"
           loader={<div>Loading Chart</div>}
           data={graph_daily_new}
-          // options={{
-          //   hAxis: {
-          //     title: 'Time',
-          //   },
-          //   vAxis: {
-          //     title: 'Daily New Cases',
-          //   },
-          // }}
           rootProps={{ 'data-testid': '1' }}
         />
         <span className="graph_heading"> Total Deaths </span>
@@ -459,14 +313,6 @@ class App extends Component {
           chartType="LineChart"
           loader={<div>Loading Chart</div>}
           data={graph_deaths}
-          // options={{
-          //   hAxis: {
-          //     title: 'Time',
-          //   },
-          //   vAxis: {
-          //     title: 'Total Deaths',
-          //   },
-          // }}
           rootProps={{ 'data-testid': '1' }}
         />
         <span className="graph_heading"> New Deaths </span>
@@ -476,17 +322,10 @@ class App extends Component {
           chartType="LineChart"
           loader={<div>Loading Chart</div>}
           data={graph_daily_deaths}
-          // options={{
-          //   hAxis: {
-          //     title: 'Time',
-          //   },
-          //   vAxis: {
-          //     title: 'New Deaths',
-          //   },
-          // }}
           rootProps={{ 'data-testid': '1' }}
         />
       </div>
+
       <div id="right_column">
         <div className="country heading">
           <u>{display_name}</u>
@@ -511,6 +350,7 @@ class App extends Component {
         <div className="heading">New hosptalizations</div> 
         <hr align="left"/>
         </div>
+        
         <button onClick= {async () => await this.changeFilter("al")}> Alabama</button>
         <button onClick= {async () => await this.changeFilter("ak")}> Alaska</button>
         <button onClick= {async () => await this.changeFilter("as")}> American Samoa</button>
